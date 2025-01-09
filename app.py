@@ -43,6 +43,14 @@ margins_css = """
     </style>
 """
 st.markdown(margins_css, unsafe_allow_html=True)
+st.markdown(
+    """
+    <style>
+    .stButton button { display: none; }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.title("Italian Public Transport Accessibility Analysis", anchor=False)
 map_tab, info_tab, download_tab = st.tabs([":world_map: Map", ":mag: Methodology", ":open_file_folder: Download Data"])
 col1, col2 = map_tab.columns([1,3])
