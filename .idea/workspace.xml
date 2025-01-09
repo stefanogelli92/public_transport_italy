@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="try debug" />
+    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="margin left right reduce 3">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -202,7 +204,31 @@
       <option name="project" value="LOCAL" />
       <updated>1736458031946</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="margin left right reduce">
+      <option name="closed" value="true" />
+      <created>1736458672658</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1736458672658</updated>
+    </task>
+    <task id="LOCAL-00007" summary="margin left right reduce 2">
+      <option name="closed" value="true" />
+      <created>1736458785985</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1736458785985</updated>
+    </task>
+    <task id="LOCAL-00008" summary="margin left right reduce 3">
+      <option name="closed" value="true" />
+      <created>1736458881085</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1736458881085</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -211,6 +237,9 @@
     <MESSAGE value="type path images" />
     <MESSAGE value="type name output" />
     <MESSAGE value="try debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="try debug" />
+    <MESSAGE value="margin left right reduce" />
+    <MESSAGE value="margin left right reduce 2" />
+    <MESSAGE value="margin left right reduce 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="margin left right reduce 3" />
   </component>
 </project>

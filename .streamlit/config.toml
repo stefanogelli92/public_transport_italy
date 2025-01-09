@@ -3,3 +3,14 @@ toolbarMode = "minimal"
 
 [ui]
 hideTopBar = true
+
+[browser]
+serverAddress = "localhost"
+serverPort = 8501
+
+[global]
+disableWatchdogWarning = true
+
+[runner]
+magicEnabled = false
+prefetchPages = true
