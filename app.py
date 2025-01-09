@@ -151,7 +151,7 @@ image_info4.image("data/images/filter_points.png")
 image_info5, text_info5 = info_tab.columns([1,3], vertical_alignment="center")
 text_info5.subheader("Travel Time Calculation Using Public Transport", anchor=False)
 text_info5.markdown("The next step in the analysis was to calculate travel times using public transport. For this, the Google Maps API was chosen as the data source, providing access to the most up-to-date and accurate data available. Using the API, the travel time for each pair of points in the grid was calculated, which, together with the air distance, will be used to weigh the travel time for the score calculation.")
-image_info5.image("data/images/maps.png")
+image_info5.image("data/images/maps.PNG")
 
 text_info6, image_info6 = info_tab.columns([3,1], vertical_alignment="center")
 text_info6.subheader("The Score", anchor=False)
