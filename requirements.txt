@@ -1,0 +1,13 @@
+numpy
+pandas
+streamlit
+geopandas
+folium
+streamlit_folium
+streamlit
+matplotlib
+pydeck
+shapely
+scikit-learn
+overpy
+googlemaps
