@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="images and data">
+    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="type name output">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
@@ -181,12 +181,30 @@
       <option name="project" value="LOCAL" />
       <updated>1736456882693</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="type path images">
+      <option name="closed" value="true" />
+      <created>1736457446034</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1736457446034</updated>
+    </task>
+    <task id="LOCAL-00004" summary="type name output">
+      <option name="closed" value="true" />
+      <created>1736457578479</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1736457578479</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
     <MESSAGE value="images and data" />
-    <option name="LAST_COMMIT_MESSAGE" value="images and data" />
+    <MESSAGE value="type path images" />
+    <MESSAGE value="type name output" />
+    <option name="LAST_COMMIT_MESSAGE" value="type name output" />
   </component>
 </project>

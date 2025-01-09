@@ -15,7 +15,7 @@ def load_data(file_path):
         data = pd.read_csv(file_path)
         return data
     else:
-        st.error("Data file not found. Please ensure the backend data file exists.")
+        st.error(f"Data file not found. Please ensure the backend data file exists. {file_path}")
         return None
 
 # Website title
