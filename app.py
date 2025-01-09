@@ -30,7 +30,7 @@ st.markdown("""
                     padding-top: 1rem;
                     padding-bottom: 0rem;
                     padding-left: 1rem;
-                    padding-right: 0rem;
+                    padding-right: 1rem;
                 }
         </style>
         """, unsafe_allow_html=True)
@@ -42,7 +42,6 @@ margins_css = """
         }
     </style>
 """
-
 st.markdown(margins_css, unsafe_allow_html=True)
 st.title("Italian Public Transport Accessibility Analysis", anchor=False)
 map_tab, info_tab, download_tab = st.tabs([":world_map: Map", ":mag: Methodology", ":open_file_folder: Download Data"])
