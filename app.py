@@ -107,6 +107,7 @@ if data is not None:
         layers=[layer],
         initial_view_state=view_state
     ), use_container_width=True, height=800)
+    col2.caption("This analysis is based on data derived from Google Maps APIs. ©2025 Google.")
 
 else:
     col2.warning("No data available. Please ensure the backend file is properly set up.")
