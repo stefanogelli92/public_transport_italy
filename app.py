@@ -39,6 +39,8 @@ margins_css = """
         .main > div {
             padding-left: 0rem;
             padding-right: 0rem;
+            padding-top: 0rem;
+            padding-bottom: 0rem;
         }
     </style>
 """
