@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="red button removed 2">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output/public_transport_score_grid.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/output/public_transport_score_grid.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
-    </list>
+    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="different score aggregation" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -247,7 +242,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736459481214</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="different score aggregation">
+      <option name="closed" value="true" />
+      <created>1736516084463</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1736516084463</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -261,6 +264,7 @@
     <MESSAGE value="margin left right reduce 3" />
     <MESSAGE value="red button removed" />
     <MESSAGE value="red button removed 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="red button removed 2" />
+    <MESSAGE value="different score aggregation" />
+    <option name="LAST_COMMIT_MESSAGE" value="different score aggregation" />
   </component>
 </project>

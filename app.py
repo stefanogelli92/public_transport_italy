@@ -194,7 +194,7 @@ info_tab.markdown("These next steps are vital for enhancing the quality of the a
 
 info_tab.divider()
 info_tab.header("Code", anchor="code")
-info_tab.markdown("This analysis was developed using Python, and the full code is available in the GitHub repository ([link](https://github.com/yourusername/project)).")
+info_tab.markdown("This analysis was developed using Python, and the full code is available in the GitHub repository ([link](https://github.com/stefanogelli92/public_transport_italy)).")
 info_tab.markdown("Please note that in order to run the code, a valid Google Maps API key is required to access the public transport data.")
 info_tab.divider()
 
