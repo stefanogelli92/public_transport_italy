@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="google maps reference">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-    </list>
+    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="padding top" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -269,7 +266,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736517312415</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="padding top">
+      <option name="closed" value="true" />
+      <created>1736521555296</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1736521555296</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -286,6 +291,7 @@
     <MESSAGE value="different score aggregation" />
     <MESSAGE value="add the correct link to the github project" />
     <MESSAGE value="google maps reference" />
-    <option name="LAST_COMMIT_MESSAGE" value="google maps reference" />
+    <MESSAGE value="padding top" />
+    <option name="LAST_COMMIT_MESSAGE" value="padding top" />
   </component>
 </project>

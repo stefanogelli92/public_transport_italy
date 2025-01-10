@@ -108,7 +108,7 @@ if data is not None:
     col2.pydeck_chart(pdk.Deck(
         layers=[layer],
         initial_view_state=view_state
-    ), use_container_width=True, height=800)
+    ), use_container_width=True)  #, height=800
     col2.caption("This analysis is based on data derived from Google Maps APIs. ©2025 Google.")
 
 else:
@@ -203,7 +203,7 @@ info_tab.divider()
 
 download_tab.header("Download Data", anchor=False)
 download_tab.markdown("You can download the results of the analysis in CSV format by clicking the link below.")
-download_tab.markdown(" - [public_transport_score_grid.csv](https://drive.google.com/file/d/1skm8LKcafcWy2aT0C5YQwntc7uAOVcQ5/view?usp=drive_link) (File size: 310 KB)")
+download_tab.markdown(" - [public_transport_score_grid.csv](https://drive.google.com/file/d/1skm8LKcafcWy2aT0C5YQwntc7uAOVcQ5/view?usp=drive_link) (File size: 293 KB)")
 
 download_tab.divider()
 download_tab.header("Dataset Structure", anchor=False)
