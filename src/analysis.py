@@ -367,8 +367,8 @@ class PublicTransportAnalysis:
         if x_column and y_column:
             # Generate key from x and y columns
             return (
-                    df[x_column].round(12).astype(str) + "-" +
-                    df[y_column].round(12).astype(str)
+                    df[x_column].round(cfg.ROUNDING_COORDS).astype(str) + "-" +
+                    df[y_column].round(cfg.ROUNDING_COORDS).astype(str)
             )
         elif geometry_column:
             # Ensure the DataFrame has the required CRS and a valid geometry column
@@ -383,8 +383,8 @@ class PublicTransportAnalysis:
             original_crs = df.crs
             df = df.to_crs(cfg.GOOGLE_MAPS_CRS)
             keys = (
-                    df[geometry_column].x.round(12).astype(str) + "-" +
-                    df[geometry_column].y.round(12).astype(str)
+                    df[geometry_column].x.round(cfg.ROUNDING_COORDS).astype(str) + "-" +
+                    df[geometry_column].y.round(cfg.ROUNDING_COORDS).astype(str)
             )
             df = df.to_crs(original_crs)  # Restore original CRS
             return keys
@@ -633,13 +633,13 @@ class PublicTransportAnalysis:
         if provincia_name is not None:
             df = df[df["provincia_name"]==provincia_name]
         self.logger.info(f"Loaded {len(df)} routes.")
-        df["origin_x"] = df["origin_x"].round(12)
-        df["origin_y"] = df["origin_y"].round(12)
-        df["destination_x"] = df["destination_x"].round(12)
-        df["destination_y"] = df["destination_y"].round(12)
+        df["origin_x"] = df["origin_x"].round(cfg.ROUNDING_COORDS)
+        df["origin_y"] = df["origin_y"].round(cfg.ROUNDING_COORDS)
+        df["destination_x"] = df["destination_x"].round(cfg.ROUNDING_COORDS)
+        df["destination_y"] = df["destination_y"].round(cfg.ROUNDING_COORDS)
         return df
 
-    def calculate_score(
+    def calculate_score_1(
         self,
         df: pd.DataFrame,
     ) -> pd.DataFrame:
@@ -673,13 +673,130 @@ class PublicTransportAnalysis:
         df[cfg.SCORE_COLUMN] = (df[cfg.SCORE_COLUMN] - df[cfg.SCORE_COLUMN].min()) / (df[cfg.SCORE_COLUMN].max() - df[cfg.SCORE_COLUMN].min())
         return df
 
+    def calculate_score_2(
+        self,
+        df: pd.DataFrame,
+    ) -> pd.DataFrame:
+        df[cfg.SCORE_COLUMN] = df["duration"]
+        from  geopy.distance import geodesic
+        df["distance"] = df.apply(lambda row: geodesic(
+            (row["origin_x"], row["origin_y"]), (row["destination_x"], row["destination_y"])).m, axis=1)
+        df["check"] = df["duration"].isna() & (df["distance"] > 0)
+        pos = df["distance"] == 0
+        df.loc[pos, cfg.SCORE_COLUMN] = 0
+        pos = df["duration"].isna() & (df["distance"] > 0)
+        df.loc[pos, cfg.SCORE_COLUMN] = df.loc[pos, "distance"] / 1.2
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] * df["size"]
+        agg_func = {
+            cfg.SCORE_COLUMN: (cfg.SCORE_COLUMN, "sum"),
+            "distance": ("distance", "sum"),
+            "size": ("size", "sum"),
+            "check": ("check", "sum"),
+            "count": ("destination_x", "count"),
+        }
+        df = df.groupby(["origin_x", "origin_y"]).agg(**agg_func).reset_index()
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] / df["size"]
+        df["check"] = df["check"] >= 10
+        min_value = df.loc[df["check"], cfg.SCORE_COLUMN].min()
+        df.loc[df["check"], cfg.SCORE_COLUMN] = min_value
+        df = gpd.GeoDataFrame(df.drop(columns = ["origin_x", "origin_y"]),
+                              geometry=gpd.points_from_xy(df["origin_x"], df["origin_y"]), crs=cfg.GOOGLE_MAPS_CRS)
+        df.to_crs(cfg.SHAPE_CRS, inplace=True)
+        df[cfg.SCORE_COLUMN] = np.log(df[cfg.SCORE_COLUMN])
+        df[cfg.SCORE_COLUMN] = 1 - (df[cfg.SCORE_COLUMN] - df[cfg.SCORE_COLUMN].min()) / (df[cfg.SCORE_COLUMN].max() - df[cfg.SCORE_COLUMN].min())
+        return df
+
+    def calculate_score_3(
+        self,
+        df: pd.DataFrame,
+    ) -> pd.DataFrame:
+        df = df[(df["origin_x"] != df["destination_x"]) | (df["origin_y"] != df["destination_y"])]
+        df["check"] = df["duration"].notnull() & (df["duration"]>0) & (df["distance"]>0)
+        df[cfg.SCORE_COLUMN] = np.where(
+            df["check"],
+            #1 / df["duration"],  # Media tempi di percorrenza
+            df["distance"] / df["duration"],  # Media delle velocità
+            1.2, # Media velocità a piedi (m/s)
+        )
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] * df["size"]
+        agg_func = {
+            cfg.SCORE_COLUMN: (cfg.SCORE_COLUMN, "sum"),
+            "size": ("size", "sum"),
+        }
+        df = df.groupby(["origin_x", "origin_y"]).agg(**agg_func).reset_index()
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] / df["size"]
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN].clip(1.2) #
+        df = gpd.GeoDataFrame(df.drop(columns = ["origin_x", "origin_y"]),
+                              geometry=gpd.points_from_xy(df["origin_x"], df["origin_y"]), crs=cfg.GOOGLE_MAPS_CRS)
+        df.to_crs(cfg.SHAPE_CRS, inplace=True)
+        df[cfg.SCORE_COLUMN] = (df[cfg.SCORE_COLUMN] - df[cfg.SCORE_COLUMN].min()) / (df[cfg.SCORE_COLUMN].max() - df[cfg.SCORE_COLUMN].min())
+        return df
+
+    def calculate_score_4(
+        self,
+        df: pd.DataFrame,
+    ) -> pd.DataFrame:
+        """Media ponderata tempi in base alla distanza"""
+        df = df[(df["origin_x"] != df["destination_x"]) | (df["origin_y"] != df["destination_y"])]
+        df[cfg.SCORE_COLUMN] = 1 / df["duration"]
+        from geopy.distance import geodesic
+        df["distance"] = df.apply(lambda row: geodesic(
+            (row["origin_x"], row["origin_y"]), (row["destination_x"], row["destination_y"])).m, axis=1)
+        pos = df["duration"].isna() & (df["distance"] > 0)
+        df.loc[pos, cfg.SCORE_COLUMN] = 1.2 / df.loc[pos, "distance"]
+        df["weights"] = 1 / df["distance"]
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] * df["weights"]
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] * df["size"]
+        df["weights"] = df["weights"] * df["size"]
+        agg_func = {
+            cfg.SCORE_COLUMN: (cfg.SCORE_COLUMN, "sum"),
+            "weights": ("weights", "sum"),
+            "size": ("size", "sum"),
+        }
+        df = df.groupby(["origin_x", "origin_y"]).agg(**agg_func).reset_index()
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] / df["size"]
+        df["weights"] = df["weights"] / df["size"]
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] /df["weights"]
+
+        df = gpd.GeoDataFrame(df.drop(columns=["origin_x", "origin_y"]),
+                              geometry=gpd.points_from_xy(df["origin_x"], df["origin_y"]), crs=cfg.GOOGLE_MAPS_CRS)
+        df.to_crs(cfg.SHAPE_CRS, inplace=True)
+        df[cfg.SCORE_COLUMN] = (df[cfg.SCORE_COLUMN] - df[cfg.SCORE_COLUMN].min()) / (
+                    df[cfg.SCORE_COLUMN].max() - df[cfg.SCORE_COLUMN].min())
+        return df
+
+    def calculate_score_5(
+        self,
+        df: pd.DataFrame,
+    ) -> pd.DataFrame:
+        """Media armonica dei tempi"""
+        df = df[(df["origin_x"] != df["destination_x"]) | (df["origin_y"] != df["destination_y"])]
+        df[cfg.SCORE_COLUMN] = 1 / df["duration"]
+        from geopy.distance import geodesic
+        df["distance"] = df.apply(lambda row: geodesic(
+            (row["origin_x"], row["origin_y"]), (row["destination_x"], row["destination_y"])).m, axis=1)
+        pos = df["duration"].isna() & (df["distance"] > 0)
+        df.loc[pos, cfg.SCORE_COLUMN] = 1.2 / df.loc[pos, "distance"]
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] * df["size"]
+        agg_func = {
+            cfg.SCORE_COLUMN: (cfg.SCORE_COLUMN, "sum"),
+            "size": ("size", "sum"),
+        }
+        df = df.groupby(["origin_x", "origin_y"]).agg(**agg_func).reset_index()
+        df[cfg.SCORE_COLUMN] = df[cfg.SCORE_COLUMN] / df["size"]
+
+        df = gpd.GeoDataFrame(df.drop(columns=["origin_x", "origin_y"]),
+                              geometry=gpd.points_from_xy(df["origin_x"], df["origin_y"]), crs=cfg.GOOGLE_MAPS_CRS)
+        df.to_crs(cfg.SHAPE_CRS, inplace=True)
+        df[cfg.SCORE_COLUMN] = (df[cfg.SCORE_COLUMN] - df[cfg.SCORE_COLUMN].min()) / (
+                    df[cfg.SCORE_COLUMN].max() - df[cfg.SCORE_COLUMN].min())
+        return df
+
     def create_output_provincia(
         self,
         provincia: Union[pd.Series, str],
         output_resolution: float,
         evaluation_resolution: float,
-        max_distance: float = cfg.MAX_DISTANCE_STOP_DEFAULT,
-        evaluation_n_points: int = 50,
         routes_path: str = cfg.public_transport_routes_path,
         plot_path: Optional[str] = "default",
     ):
@@ -689,32 +806,48 @@ class PublicTransportAnalysis:
 
         grid = self.generate_grid_with_resolutions(provincia['geometry'], resolutions=[output_resolution, evaluation_resolution])
 
-        stop = self.get_public_stops()
-        stop = stop[stop[cfg.TAG_PROVINCIA] == provincia[cfg.TAG_PROVINCIA]]
-        destinations = self.filter_grid_points(grid, stop, max_distance=max_distance)
-        destinations = self.calculate_clusters(destinations[destinations["resolution"] >= evaluation_resolution], num_clusters=evaluation_n_points)
-        destinations = self.aggregate_clusters(destinations)
-
-        grid = grid[grid["resolution"] >= output_resolution]
-
-        score_df = self.load_routes(output_file=routes_path)
+        # Restore destination from routes
+        score_df = self.load_routes(output_file=routes_path, provincia_name=provincia[cfg.TAG_PROVINCIA])
+        destinations = self.restore_destination_from_routes(score_df, grid[grid["resolution"] == evaluation_resolution].copy())
 
         grid.to_crs(cfg.GOOGLE_MAPS_CRS, inplace=True)
-        grid["origin_x"] = grid.geometry.x.round(12)
-        grid["origin_y"] = grid.geometry.y.round(12)
+        grid["origin_x"] = grid.geometry.x.round(cfg.ROUNDING_COORDS)
+        grid["origin_y"] = grid.geometry.y.round(cfg.ROUNDING_COORDS)
         grid = pd.DataFrame(grid[["origin_x", "origin_y"]])
         destinations.to_crs(cfg.GOOGLE_MAPS_CRS, inplace=True)
-        destinations["destination_x"] = destinations.geometry.x.round(12)
-        destinations["destination_y"] = destinations.geometry.y.round(12)
+        destinations["destination_x"] = destinations.geometry.x.round(cfg.ROUNDING_COORDS)
+        destinations["destination_y"] = destinations.geometry.y.round(cfg.ROUNDING_COORDS)
         destinations = pd.DataFrame(destinations[["destination_x", "destination_y", "size"]])
         df = grid.assign(key=0).merge(destinations.assign(key=0), on = 'key').drop(columns = ['key'])
         df = df.merge(score_df, on=["origin_x", "origin_y", "destination_x", "destination_y"], how="left")
         del grid, destinations, score_df
 
-        df = self.calculate_score(df)
+        df = self.calculate_score_1(df)
         self.plot_provincia_result(provincia, df, path = plot_path)
         self.create_grid_points_file(df, provincia_name=provincia[cfg.TAG_PROVINCIA])
         return df
+
+    def restore_destination_from_routes(
+        self,
+        route_df: pd.DataFrame,
+        grid_df: gpd.GeoDataFrame,
+    ):
+        destinations = route_df[["destination_x", "destination_y"]].copy().drop_duplicates()
+        destinations = gpd.GeoDataFrame(
+            geometry=gpd.points_from_xy(destinations["destination_x"], destinations["destination_y"]),
+            crs=cfg.GOOGLE_MAPS_CRS,
+        )
+        destinations.to_crs(cfg.SHAPE_CRS, inplace=True)
+
+        coords_a = grid_df.geometry.apply(lambda geom: (geom.x, geom.y)).to_list()
+        coords_b = destinations.geometry.apply(lambda geom: (geom.x, geom.y)).to_list()
+        from scipy.spatial import cKDTree
+        tree = cKDTree(coords_b)
+        distances, indices = tree.query(coords_a, k=1)
+        grid_df['geometry'] = destinations.iloc[indices].geometry.values
+        grid_df = grid_df.groupby("geometry").agg(size=("resolution", "count")).reset_index()
+        grid_df = gpd.GeoDataFrame(grid_df, geometry="geometry", crs=cfg.SHAPE_CRS)
+        return grid_df
 
     def create_grid_points_file(
         self,
