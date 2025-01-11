@@ -2,6 +2,7 @@ import json
 
 import numpy as np
 import streamlit as st
+from streamlit_extras.stylable_container import stylable_container
 import pandas as pd
 import pydeck as pdk
 import os
@@ -52,7 +53,6 @@ texts = load_language_file(st.session_state["selected_language"])
 
 title = st.title(texts["title"], anchor=False)
 
-from streamlit_extras.stylable_container import stylable_container
 with stylable_container(
     key="lang_sel_cont",
     css_styles="""
