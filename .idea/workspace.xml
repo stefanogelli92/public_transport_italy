@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="change map dimensions">
-      <change afterPath="$PROJECT_DIR$/data/texts/eng.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/texts/ita.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-    </list>
+    <list default="true" id="7e1b9f07-cb6e-4a5e-af88-a02a1a81aa73" name="Changes" comment="two lenguages" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -287,7 +282,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736522207960</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="two lenguages">
+      <option name="closed" value="true" />
+      <created>1736610996141</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1736610996141</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -306,6 +309,7 @@
     <MESSAGE value="google maps reference" />
     <MESSAGE value="padding top" />
     <MESSAGE value="change map dimensions" />
-    <option name="LAST_COMMIT_MESSAGE" value="change map dimensions" />
+    <MESSAGE value="two lenguages" />
+    <option name="LAST_COMMIT_MESSAGE" value="two lenguages" />
   </component>
 </project>
